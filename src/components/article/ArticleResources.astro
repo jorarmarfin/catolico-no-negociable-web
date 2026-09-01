@@ -1,0 +1,33 @@
+---
+import type { ArticleResource } from '../../types/taxonomy';
+
+interface Props {
+  resources: ArticleResource[];
+}
+
+const { resources } = Astro.props;
+---
+
+{
+  resources.length > 0 && (
+    <section class="mx-auto mt-10 max-w-prose border-t border-border pt-6">
+      <h2 class="font-sans text-sm font-semibold uppercase tracking-wide text-secondary">Recursos</h2>
+      <ul class="mt-3 space-y-2">
+        {resources.map((resource) => (
+          <li>
+            <a
+              href={resource.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              download={resource.is_downloadable}
+              class="inline-flex items-center gap-2 font-sans text-sm text-foreground underline decoration-border underline-offset-2 hover:text-primary"
+            >
+              <span class="rounded-full bg-accent/10 px-2 py-0.5 text-xs font-medium text-accent">{resource.type}</span>
+              {resource.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

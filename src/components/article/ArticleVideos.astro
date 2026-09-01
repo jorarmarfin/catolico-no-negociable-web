@@ -1,0 +1,29 @@
+---
+import type { ArticleVideo } from '../../types/taxonomy';
+import { toEmbedUrl } from '../../lib/utils/video';
+
+interface Props {
+  videos: ArticleVideo[];
+}
+
+const { videos } = Astro.props;
+---
+
+{
+  videos.length > 0 && (
+    <section class="mx-auto mt-10 max-w-prose">
+      {videos.map((video) => (
+        <div class="mb-6 aspect-video w-full overflow-hidden rounded-xl bg-black">
+          <iframe
+            src={toEmbedUrl(video)}
+            title={video.title ?? 'Video'}
+            class="h-full w-full"
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          />
+        </div>
+      ))}
+    </section>
+  )
+}

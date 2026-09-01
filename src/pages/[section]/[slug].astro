@@ -1,0 +1,28 @@
+---
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { getArticleBySlug } from '../../lib/api/articles';
+import { ApiRequestError } from '../../lib/api/client';
+
+const { section, slug } = Astro.params;
+
+let article;
+try {
+  ({ data: article } = await getArticleBySlug(slug!));
+} catch (error) {
+  if (error instanceof ApiRequestError && error.status === 404) {
+    return Astro.rewrite('/404');
+  }
+  throw error;
+}
+
+if (article.section.slug !== section) {
+  return Astro.redirect(`/${article.section.slug}/${article.slug}`, 301);
+}
+
+const breadcrumbs = [
+  { name: article.section.name, href: `/${article.section.slug}` },
+  { name: article.title, href: Astro.url.pathname }
+];
+---
+
+<ArticleLayout article={article} breadcrumbs={breadcrumbs} />

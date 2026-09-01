@@ -1,0 +1,24 @@
+---
+import type { ArticleSeriesRef } from '../../types/taxonomy';
+
+interface Props {
+  series: ArticleSeriesRef[];
+}
+
+const { series } = Astro.props;
+---
+
+{
+  series.length > 0 && (
+    <div class="mx-auto mt-6 max-w-prose">
+      {series.map((item) => (
+        <a
+          href={`/series/${item.slug}`}
+          class="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 font-sans text-xs font-medium text-secondary transition-colors duration-200 hover:border-primary hover:text-primary"
+        >
+          Serie: {item.name} · Parte {item.position}
+        </a>
+      ))}
+    </div>
+  )
+}

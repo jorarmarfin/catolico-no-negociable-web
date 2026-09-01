@@ -1,0 +1,28 @@
+---
+import type { Tag, Topic } from '../../types/taxonomy';
+import Badge from '../ui/Badge.astro';
+
+interface Props {
+  topics: Topic[];
+  tags: Tag[];
+}
+
+const { topics, tags } = Astro.props;
+---
+
+{
+  (topics.length > 0 || tags.length > 0) && (
+    <div class="mx-auto mt-8 flex max-w-prose flex-wrap items-center gap-2">
+      {topics.map((topic) => (
+        <a href={`/temas/${topic.slug}`}>
+          <Badge variant="primary">{topic.name}</Badge>
+        </a>
+      ))}
+      {tags.map((tag) => (
+        <a href={`/tags/${tag.slug}`}>
+          <Badge variant="muted">#{tag.name}</Badge>
+        </a>
+      ))}
+    </div>
+  )
+}

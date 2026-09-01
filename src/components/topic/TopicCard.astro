@@ -1,0 +1,19 @@
+---
+import type { Topic } from '../../types/taxonomy';
+
+interface Props {
+  topic: Topic;
+}
+
+const { topic } = Astro.props;
+---
+
+<a
+  href={`/temas/${topic.slug}`}
+  class="group flex items-center justify-between rounded-xl border border-border bg-white px-5 py-4 transition-colors duration-200 hover:border-primary"
+>
+  <span class="font-serif text-lg font-medium text-foreground group-hover:text-primary">{topic.name}</span>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="h-4 w-4 text-muted-foreground" aria-hidden="true">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+  </svg>
+</a>

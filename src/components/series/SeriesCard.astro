@@ -1,0 +1,14 @@
+---
+import type { SeriesSummary } from '../../types/series';
+
+interface Props {
+  series: SeriesSummary;
+}
+
+const { series } = Astro.props;
+---
+
+<a href={`/series/${series.slug}`} class="group flex flex-col gap-2 rounded-xl border border-border bg-white p-6 transition-colors duration-200 hover:border-primary">
+  <h3 class="font-serif text-xl font-semibold text-foreground group-hover:text-primary">{series.name}</h3>
+  {series.description && <p class="line-clamp-2 font-sans text-sm text-muted-foreground">{series.description}</p>}
+</a>

@@ -1,0 +1,47 @@
+---
+export const prerender = true;
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/navigation/Breadcrumbs.astro';
+---
+
+<BaseLayout
+  title="Acerca de"
+  description="Propósito, enfoque formativo y criterios editoriales de Católico No Negociable."
+>
+  <Breadcrumbs items={[{ name: 'Acerca de', href: '/acerca-de' }]} />
+  <div class="mx-auto max-w-prose px-4 py-10">
+    <h1 class="font-serif text-3xl font-bold text-foreground">Acerca de Católico No Negociable</h1>
+
+    <div class="article-prose mt-6">
+      <h2>Propósito</h2>
+      <p>
+        Católico No Negociable es una biblioteca de formación católica: un espacio organizado por
+        conocimiento —catequesis, apologética, Biblia, doctrina, liturgia, moral, historia de la
+        Iglesia y Padres de la Iglesia— para encontrar respuestas claras y confiables, en vez de
+        una sucesión cronológica de publicaciones.
+      </p>
+
+      <h2>Enfoque formativo</h2>
+      <p>
+        El contenido busca acompañar la catequesis y la apologética con un lenguaje claro,
+        fundamentado en la Escritura, el Catecismo, los Padres de la Iglesia y el Magisterio.
+      </p>
+
+      <h2>Naturaleza del contenido y aviso editorial</h2>
+      <p>
+        El contenido de esta plataforma tiene finalidad catequética, educativa y apologética.
+        No sustituye el magisterio oficial de la Iglesia ni el acompañamiento pastoral cuando
+        este es necesario. Ante dudas doctrinales específicas o situaciones personales, se
+        recomienda acudir a un sacerdote o a la autoridad eclesial competente.
+      </p>
+
+      <h2>Criterios editoriales</h2>
+      <p>
+        Todo el contenido es revisado antes de su publicación y procura citar fuentes verificables:
+        Sagrada Escritura, Catecismo de la Iglesia Católica, escritos de los Padres de la Iglesia
+        y documentos del Magisterio.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

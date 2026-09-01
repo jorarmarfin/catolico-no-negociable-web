@@ -1,0 +1,15 @@
+---
+interface Props {
+  paragraph: string | number;
+}
+
+const { paragraph } = Astro.props;
+---
+
+<figure class="my-6 rounded-lg border border-border bg-muted/50 p-5">
+  <p class="font-sans text-xs font-semibold uppercase tracking-wide text-secondary">Catecismo de la Iglesia Católica</p>
+  <blockquote class="mt-2 font-serif text-base leading-relaxed text-foreground">
+    <slot />
+  </blockquote>
+  <figcaption class="mt-2 font-sans text-sm font-semibold text-primary">CIC {paragraph}</figcaption>
+</figure>

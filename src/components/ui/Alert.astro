@@ -1,0 +1,16 @@
+---
+interface Props {
+  variant?: 'info' | 'error';
+}
+
+const { variant = 'info' } = Astro.props;
+
+const variants = {
+  info: 'border-primary/30 bg-primary/5 text-primary',
+  error: 'border-destructive/30 bg-destructive/5 text-destructive'
+};
+---
+
+<div role="alert" class={`rounded-lg border px-4 py-3 font-sans text-sm ${variants[variant]}`}>
+  <slot />
+</div>

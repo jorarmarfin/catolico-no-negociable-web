@@ -1,0 +1,17 @@
+---
+import type { Section } from '../../types/taxonomy';
+
+interface Props {
+  section: Section;
+}
+
+const { section } = Astro.props;
+---
+
+<a
+  href={`/${section.slug}`}
+  class="group flex flex-col gap-2 rounded-xl border border-border bg-white p-6 transition-colors duration-200 hover:border-primary"
+>
+  <h3 class="font-serif text-xl font-semibold text-foreground group-hover:text-primary">{section.name}</h3>
+  {section.description && <p class="font-sans text-sm text-muted-foreground">{section.description}</p>}
+</a>

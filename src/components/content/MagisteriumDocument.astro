@@ -1,0 +1,19 @@
+---
+interface Props {
+  document: string;
+  section?: string;
+}
+
+const { document, section } = Astro.props;
+---
+
+<figure class="my-6 rounded-lg border border-primary/30 bg-primary/5 p-5">
+  <p class="font-sans text-xs font-semibold uppercase tracking-wide text-primary">Documento del Magisterio</p>
+  <blockquote class="mt-2 font-serif text-base leading-relaxed text-foreground">
+    <slot />
+  </blockquote>
+  <figcaption class="mt-2 font-sans text-sm font-semibold text-primary">
+    {document}
+    {section && ` — ${section}`}
+  </figcaption>
+</figure>

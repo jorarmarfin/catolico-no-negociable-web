@@ -1,0 +1,18 @@
+---
+interface Props {
+  author: string;
+  work: string;
+}
+
+const { author, work } = Astro.props;
+---
+
+<figure class="my-6 rounded-lg border border-border p-5">
+  <p class="font-sans text-xs font-semibold uppercase tracking-wide text-secondary">Padre de la Iglesia</p>
+  <blockquote class="mt-2 font-serif text-base italic leading-relaxed text-foreground">
+    <slot />
+  </blockquote>
+  <figcaption class="mt-2 font-sans text-sm text-foreground">
+    <span class="font-semibold">{author}</span> · {work}
+  </figcaption>
+</figure>

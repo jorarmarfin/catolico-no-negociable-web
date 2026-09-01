@@ -1,0 +1,27 @@
+---
+import type { Series } from '../../types/series';
+
+interface Props {
+  series: Series;
+}
+
+const { series } = Astro.props;
+---
+
+<ol class="space-y-3">
+  {
+    series.articles.map((article, index) => (
+      <li>
+        <a
+          href={`/${article.section.slug}/${article.slug}`}
+          class="flex items-center gap-4 rounded-xl border border-border bg-white p-4 transition-colors duration-200 hover:border-primary"
+        >
+          <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary font-sans text-sm font-semibold text-primary-foreground">
+            {index + 1}
+          </span>
+          <span class="font-serif text-base font-medium text-foreground">{article.title}</span>
+        </a>
+      </li>
+    ))
+  }
+</ol>

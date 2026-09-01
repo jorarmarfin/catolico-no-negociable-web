@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import SectionHeader from '../components/home/SectionHeader.astro';
+import SectionCard from '../components/section/SectionCard.astro';
+import TopicCard from '../components/topic/TopicCard.astro';
+import ArticleGrid from '../components/article/ArticleGrid.astro';
+import SeriesGrid from '../components/series/SeriesGrid.astro';
+import Button from '../components/ui/Button.astro';
+import { safeFetch } from '../lib/api/safe';
+import { listSections } from '../lib/api/sections';
+import { listTopics } from '../lib/api/topics';
+import { listArticles } from '../lib/api/articles';
+import { listSeries } from '../lib/api/series';
+
+const [sectionsRes, topicsRes, latestArticlesRes, featuredRes, seriesRes] = await Promise.all([
+  safeFetch(() => listSections()),
+  safeFetch(() => listTopics()),
+  safeFetch(() => listArticles({ page: 1 })),
+  safeFetch(() => listArticles({ page: 1, featured: 1 })),
+  safeFetch(() => listSeries())
+]);
+
+const sections = sectionsRes?.data ?? [];
+const topics = (topicsRes?.data ?? []).slice(0, 6);
+const latestArticles = (latestArticlesRes?.data ?? []).slice(0, 6);
+const featuredArticles = (featuredRes?.data ?? []).slice(0, 3);
+const series = (seriesRes?.data ?? []).slice(0, 3);
+---
+
+<BaseLayout
+  title="Católico No Negociable"
+  description="Catequesis, apologética, Biblia, doctrina y formación católica organizada para encontrar respuestas claras y confiables."
+>
+  <Hero />
+
+  <div class="mx-auto max-w-6xl space-y-16 px-4 py-16">
+    <section>
+      <SectionHeader title="Secciones" href="/explorar" hrefLabel="Ver todas" />
+      {
+        sections.length > 0 ? (
+          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {sections.map((section) => (
+              <SectionCard section={section} />
+            ))}
+          </div>
+        ) : (
+          <p class="font-sans text-muted-foreground">Todavía no hay secciones publicadas.</p>
+        )
+      }
+    </section>
+
+    <section>
+      <SectionHeader title="Temas recomendados" href="/temas" />
+      {
+        topics.length > 0 ? (
+          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {topics.map((topic) => (
+              <TopicCard topic={topic} />
+            ))}
+          </div>
+        ) : (
+          <p class="font-sans text-muted-foreground">Todavía no hay temas publicados.</p>
+        )
+      }
+    </section>
+
+    <section>
+      <SectionHeader title="Últimos artículos" href="/explorar" />
+      <ArticleGrid articles={latestArticles} emptyMessage="Todavía no hay artículos publicados." />
+    </section>
+
+    <section>
+      <SectionHeader title="Destacados" />
+      <ArticleGrid articles={featuredArticles} emptyMessage="Todavía no hay contenido destacado." />
+    </section>
+
+    <section>
+      <SectionHeader title="Series y colecciones" href="/series" />
+      <SeriesGrid series={series} />
+    </section>
+
+    <section class="rounded-2xl bg-primary px-8 py-14 text-center text-primary-foreground">
+      <h2 class="font-serif text-2xl font-semibold sm:text-3xl">Sigue explorando la biblioteca</h2>
+      <p class="mx-auto mt-2 max-w-xl font-sans text-primary-foreground/80">
+        Descubre contenido por sección, tema o serie, sin depender de una línea de tiempo.
+      </p>
+      <div class="mt-6">
+        <Button href="/explorar" variant="secondary" class="!border-primary-foreground !text-primary-foreground hover:!bg-white/10">
+          Explorar todo
+        </Button>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

@@ -1,0 +1,51 @@
+---
+import type { PaginationMeta } from '../../types/api';
+
+interface Props {
+  meta: PaginationMeta;
+  basePath: string;
+}
+
+const { meta, basePath } = Astro.props;
+const { current_page: current, last_page: last } = meta;
+
+function pageUrl(page: number): string {
+  const url = new URL(basePath, Astro.site ?? 'http://localhost');
+  if (page > 1) url.searchParams.set('page', String(page));
+  return `${url.pathname}${url.search}`;
+}
+---
+
+{
+  last > 1 && (
+    <nav class="flex items-center justify-center gap-2 font-sans text-sm" aria-label="Paginación">
+      <a
+        href={current > 1 ? pageUrl(current - 1) : undefined}
+        aria-disabled={current <= 1}
+        class={`min-h-11 min-w-11 flex items-center justify-center rounded-lg border border-border px-3 transition-colors duration-200 ${
+          current <= 1
+            ? 'pointer-events-none opacity-40'
+            : 'cursor-pointer hover:bg-muted'
+        }`}
+      >
+        Anterior
+      </a>
+
+      <span class="px-2 text-muted-foreground">
+        Página {current} de {last}
+      </span>
+
+      <a
+        href={current < last ? pageUrl(current + 1) : undefined}
+        aria-disabled={current >= last}
+        class={`min-h-11 min-w-11 flex items-center justify-center rounded-lg border border-border px-3 transition-colors duration-200 ${
+          current >= last
+            ? 'pointer-events-none opacity-40'
+            : 'cursor-pointer hover:bg-muted'
+        }`}
+      >
+        Siguiente
+      </a>
+    </nav>
+  )
+}

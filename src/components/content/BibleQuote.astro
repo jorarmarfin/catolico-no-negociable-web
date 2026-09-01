@@ -1,0 +1,14 @@
+---
+interface Props {
+  reference: string;
+}
+
+const { reference } = Astro.props;
+---
+
+<figure class="my-6 rounded-r-lg border-l-4 border-accent bg-accent/5 py-4 pl-5 pr-4">
+  <blockquote class="font-serif text-lg italic leading-relaxed text-foreground">
+    <slot />
+  </blockquote>
+  <figcaption class="mt-2 font-sans text-sm font-semibold text-accent">{reference}</figcaption>
+</figure>

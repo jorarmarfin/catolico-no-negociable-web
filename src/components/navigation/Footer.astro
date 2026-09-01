@@ -1,0 +1,71 @@
+---
+import { Image } from 'astro:assets';
+import { safeFetch } from '../../lib/api/safe';
+import { listSections } from '../../lib/api/sections';
+import logo from '../../assets/logo.png';
+
+const sectionsRes = await safeFetch(() => listSections());
+const sections = sectionsRes?.data ?? [];
+
+const columns = [
+  {
+    title: 'Biblioteca',
+    links: sections.map((section) => ({ href: `/${section.slug}`, label: section.name }))
+  },
+  {
+    title: 'Explorar',
+    links: [
+      { href: '/temas', label: 'Temas' },
+      { href: '/series', label: 'Series' }
+    ]
+  },
+  {
+    title: 'Plataforma',
+    links: [
+      { href: '/buscar', label: 'Buscar' },
+      { href: '/explorar', label: 'Explorar todo' },
+      { href: '/acerca-de', label: 'Acerca de' }
+    ]
+  }
+];
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-border bg-muted/40">
+  <div class="mx-auto max-w-6xl px-4 py-12">
+    <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
+      <div class="md:col-span-1">
+        <div class="flex items-center gap-2.5">
+          <Image src={logo} alt="" width={32} height={32} class="h-8 w-8" />
+          <p class="font-serif text-lg font-semibold text-primary">Católico No Negociable</p>
+        </div>
+        <p class="mt-2 font-sans text-sm text-muted-foreground">
+          Una biblioteca católica digital organizada por conocimiento.
+        </p>
+      </div>
+
+      {
+        columns.map((column) => (
+          <div>
+            <p class="font-sans text-sm font-semibold text-foreground">{column.title}</p>
+            <ul class="mt-3 space-y-2">
+              {column.links.map((link) => (
+                <li>
+                  <a href={link.href} class="font-sans text-sm text-muted-foreground transition-colors duration-200 hover:text-primary">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="mt-10 flex flex-col gap-2 border-t border-border pt-6 font-sans text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+      <p>© {year} Católico No Negociable. Contenido con fines catequéticos, educativos y apologéticos.</p>
+      <p>No sustituye el magisterio oficial ni el acompañamiento pastoral.</p>
+    </div>
+  </div>
+</footer>

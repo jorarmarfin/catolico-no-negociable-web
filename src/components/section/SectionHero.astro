@@ -1,0 +1,16 @@
+---
+import type { Section } from '../../types/taxonomy';
+
+interface Props {
+  section: Section;
+}
+
+const { section } = Astro.props;
+---
+
+<header class="border-b border-border bg-muted/40">
+  <div class="mx-auto max-w-6xl px-4 py-12">
+    <h1 class="font-serif text-3xl font-bold text-foreground sm:text-4xl">{section.name}</h1>
+    {section.description && <p class="mt-3 max-w-2xl font-sans text-lg text-muted-foreground">{section.description}</p>}
+  </div>
+</header>

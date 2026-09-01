@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/navigation/Breadcrumbs.astro';
+import SeriesGrid from '../../components/series/SeriesGrid.astro';
+import { safeFetch } from '../../lib/api/safe';
+import { listSeries } from '../../lib/api/series';
+
+const seriesRes = await safeFetch(() => listSeries());
+---
+
+<BaseLayout title="Series" description="Colecciones de contenido ordenado: los sacramentos, introducción a la Biblia, defendiendo la fe y más.">
+  <Breadcrumbs items={[{ name: 'Series', href: '/series' }]} />
+  <div class="mx-auto max-w-6xl px-4 py-10">
+    <h1 class="font-serif text-3xl font-bold text-foreground">Series</h1>
+    <p class="mt-2 max-w-2xl font-sans text-muted-foreground">Contenido ordenado paso a paso, ideal para seguir una ruta de formación completa.</p>
+    <div class="mt-8">
+      <SeriesGrid series={seriesRes?.data ?? []} />
+    </div>
+  </div>
+</BaseLayout>

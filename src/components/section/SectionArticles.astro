@@ -1,0 +1,21 @@
+---
+import type { ArticleSummary } from '../../types/article';
+import type { PaginationMeta } from '../../types/api';
+import ArticleGrid from '../article/ArticleGrid.astro';
+import Pagination from '../ui/Pagination.astro';
+
+interface Props {
+  articles: ArticleSummary[];
+  meta: PaginationMeta;
+  basePath: string;
+}
+
+const { articles, meta, basePath } = Astro.props;
+---
+
+<section>
+  <ArticleGrid articles={articles} emptyMessage="Todavía no hay contenidos publicados sobre esta sección." />
+  <div class="mt-10">
+    <Pagination meta={meta} basePath={basePath} />
+  </div>
+</section>

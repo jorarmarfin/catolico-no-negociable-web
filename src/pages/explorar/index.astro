@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/navigation/Breadcrumbs.astro';
+import SectionHeader from '../../components/home/SectionHeader.astro';
+import SectionCard from '../../components/section/SectionCard.astro';
+import TopicGrid from '../../components/topic/TopicGrid.astro';
+import SeriesGrid from '../../components/series/SeriesGrid.astro';
+import ArticleGrid from '../../components/article/ArticleGrid.astro';
+import { safeFetch } from '../../lib/api/safe';
+import { listSections } from '../../lib/api/sections';
+import { listTopics } from '../../lib/api/topics';
+import { listSeries } from '../../lib/api/series';
+import { listArticles } from '../../lib/api/articles';
+
+const [sectionsRes, topicsRes, seriesRes, articlesRes] = await Promise.all([
+  safeFetch(() => listSections()),
+  safeFetch(() => listTopics()),
+  safeFetch(() => listSeries()),
+  safeFetch(() => listArticles({ page: 1 }))
+]);
+---
+
+<BaseLayout
+  title="Explorar"
+  description="Descubre toda la biblioteca por secciones, temas, series y contenido reciente."
+>
+  <Breadcrumbs items={[{ name: 'Explorar', href: '/explorar' }]} />
+  <div class="mx-auto max-w-6xl space-y-14 px-4 py-10">
+    <div>
+      <h1 class="font-serif text-3xl font-bold text-foreground">Explorar la biblioteca</h1>
+      <p class="mt-2 max-w-2xl font-sans text-muted-foreground">
+        Navega por secciones, temas y series — sin depender de una línea de tiempo.
+      </p>
+    </div>
+
+    <section>
+      <SectionHeader title="Secciones" />
+      {
+        (sectionsRes?.data ?? []).length > 0 ? (
+          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {(sectionsRes?.data ?? []).map((section) => (
+              <SectionCard section={section} />
+            ))}
+          </div>
+        ) : (
+          <p class="font-sans text-muted-foreground">Todavía no hay secciones publicadas.</p>
+        )
+      }
+    </section>
+
+    <section>
+      <SectionHeader title="Temas" href="/temas" />
+      <TopicGrid topics={topicsRes?.data ?? []} />
+    </section>
+
+    <section>
+      <SectionHeader title="Series" href="/series" />
+      <SeriesGrid series={seriesRes?.data ?? []} />
+    </section>
+
+    <section>
+      <SectionHeader title="Contenido reciente" />
+      <ArticleGrid articles={(articlesRes?.data ?? []).slice(0, 6)} />
+    </section>
+  </div>
+</BaseLayout>

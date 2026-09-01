@@ -1,0 +1,39 @@
+---
+import type { ArticleSummary } from '../../types/article';
+import Badge from '../ui/Badge.astro';
+import { formatDate } from '../../lib/utils/format';
+
+interface Props {
+  article: ArticleSummary;
+}
+
+const { article } = Astro.props;
+---
+
+<a
+  href={`/${article.section.slug}/${article.slug}`}
+  class="group flex flex-col overflow-hidden rounded-xl border border-border bg-white transition-colors duration-200 hover:border-primary"
+>
+  {
+    article.featured_image && (
+      <img
+        src={article.featured_image}
+        alt=""
+        width="640"
+        height="360"
+        loading="lazy"
+        class="aspect-video w-full object-cover"
+      />
+    )
+  }
+  <div class="flex flex-1 flex-col gap-2 p-5">
+    <Badge variant="accent">{article.section.name}</Badge>
+    <h3 class="font-serif text-lg font-semibold leading-snug text-foreground group-hover:text-primary">
+      {article.title}
+    </h3>
+    <p class="line-clamp-2 font-sans text-sm text-muted-foreground">{article.excerpt}</p>
+    <div class="mt-auto pt-2 font-sans text-xs text-muted-foreground">
+      <time datetime={article.published_at}>{formatDate(article.published_at)}</time>
+    </div>
+  </div>
+</a>

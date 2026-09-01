@@ -1,0 +1,9 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = 'h-4 w-full' } = Astro.props;
+---
+
+<div class={`animate-pulse rounded-md bg-muted ${className}`} aria-hidden="true"></div>

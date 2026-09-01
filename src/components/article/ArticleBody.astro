@@ -1,0 +1,10 @@
+---
+interface Props {
+  /** article.content_html — ya renderizado con CommonMark y sanitizado por el backend. */
+  html: string;
+}
+
+const { html } = Astro.props;
+---
+
+<div class="article-prose mx-auto max-w-prose" set:html={html} />

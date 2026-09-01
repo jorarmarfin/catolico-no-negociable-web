@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
+
+Astro.response.status = 500;
+---
+
+<BaseLayout title="Error del servidor" description="Ocurrió un problema al cargar este contenido.">
+  <div class="mx-auto flex max-w-xl flex-col items-center px-4 py-24 text-center">
+    <p class="font-serif text-6xl font-bold text-destructive">500</p>
+    <h1 class="mt-4 font-serif text-2xl font-semibold text-foreground">Algo salió mal de nuestro lado.</h1>
+    <p class="mt-2 font-sans text-muted-foreground">
+      Estamos teniendo problemas para cargar este contenido. Intenta de nuevo en unos minutos.
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <Button href="/">Volver al inicio</Button>
+      <Button href="/buscar" variant="secondary">Buscar</Button>
+    </div>
+  </div>
+</BaseLayout>

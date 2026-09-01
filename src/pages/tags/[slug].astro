@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/navigation/Breadcrumbs.astro';
+import ArticleGrid from '../../components/article/ArticleGrid.astro';
+import Pagination from '../../components/ui/Pagination.astro';
+import { listTagArticles } from '../../lib/api/tags';
+import { safeFetch } from '../../lib/api/safe';
+
+const { slug } = Astro.params;
+const page = Number(Astro.url.searchParams.get('page') ?? '1');
+
+// El backend no expone un detalle de tag (solo /tags/{slug}/articles), así que
+// el nombre visible se deriva del slug hasta que exista ese endpoint.
+const tagName = slug!.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
+const articlesRes = await safeFetch(() => listTagArticles(slug!, page));
+---
+
+<BaseLayout title={`Etiqueta: ${tagName}`} description={`Artículos etiquetados con ${tagName}.`}>
+  <Breadcrumbs items={[{ name: tagName, href: `/tags/${slug}` }]} />
+  <div class="mx-auto max-w-6xl px-4 py-10">
+    <p class="font-sans text-sm font-semibold uppercase tracking-wide text-accent">Etiqueta</p>
+    <h1 class="mt-1 font-serif text-3xl font-bold text-foreground">{tagName}</h1>
+    <div class="mt-8">
+      <ArticleGrid articles={articlesRes?.data ?? []} emptyMessage="Todavía no hay artículos con esta etiqueta." />
+    </div>
+    {articlesRes && (
+      <div class="mt-10">
+        <Pagination meta={articlesRes.meta} basePath={`/tags/${slug}`} />
+      </div>
+    )}
+  </div>
+</BaseLayout>

@@ -1,0 +1,23 @@
+---
+import type { ArticleSummary } from '../../types/article';
+import ArticleCard from './ArticleCard.astro';
+
+interface Props {
+  articles: ArticleSummary[];
+}
+
+const { articles } = Astro.props;
+---
+
+{
+  articles.length > 0 && (
+    <section class="mx-auto mt-12 max-w-5xl border-t border-border pt-10">
+      <h2 class="font-serif text-2xl font-semibold text-foreground">Artículos relacionados</h2>
+      <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {articles.map((article) => (
+          <ArticleCard article={article} />
+        ))}
+      </div>
+    </section>
+  )
+}

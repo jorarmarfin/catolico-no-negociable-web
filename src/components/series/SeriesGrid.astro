@@ -1,0 +1,23 @@
+---
+import type { SeriesSummary } from '../../types/series';
+import SeriesCard from './SeriesCard.astro';
+import EmptyState from '../ui/EmptyState.astro';
+
+interface Props {
+  series: SeriesSummary[];
+}
+
+const { series } = Astro.props;
+---
+
+{
+  series.length > 0 ? (
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {series.map((item) => (
+        <SeriesCard series={item} />
+      ))}
+    </div>
+  ) : (
+    <EmptyState title="Todavía no hay series publicadas." />
+  )
+}

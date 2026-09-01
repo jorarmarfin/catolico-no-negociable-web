@@ -1,0 +1,68 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs, { type Crumb } from '../components/navigation/Breadcrumbs.astro';
+import ArticleHeader from '../components/article/ArticleHeader.astro';
+import ArticleBody from '../components/article/ArticleBody.astro';
+import ArticleVideos from '../components/article/ArticleVideos.astro';
+import ArticleSeriesBadges from '../components/article/ArticleSeriesBadges.astro';
+import ArticleTaxonomies from '../components/article/ArticleTaxonomies.astro';
+import ArticleSources from '../components/article/ArticleSources.astro';
+import ArticleResources from '../components/article/ArticleResources.astro';
+import RelatedArticles from '../components/article/RelatedArticles.astro';
+import TableOfContents from '../components/article/TableOfContents';
+import ShareButtons from '../components/article/ShareButtons';
+import JsonLd from '../components/seo/JsonLd.astro';
+import type { Article } from '../types/article';
+import { extractTocAndAnnotateContent } from '../lib/utils/toc';
+import { articleJsonLd } from '../lib/seo/jsonld';
+
+interface Props {
+  article: Article;
+  breadcrumbs: Crumb[];
+}
+
+const { article, breadcrumbs } = Astro.props;
+const { html, toc } = extractTocAndAnnotateContent(article.content_html);
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
+---
+
+<BaseLayout
+  title={article.seo?.title ?? article.title}
+  description={article.seo?.description ?? article.excerpt}
+  ogImage={article.featured_image ?? undefined}
+  ogType="article"
+>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <article class="mx-auto max-w-6xl px-4 py-10">
+    <div class="lg:grid lg:grid-cols-[1fr_240px] lg:gap-12">
+      <div>
+        <ArticleHeader article={article} />
+        <ArticleSeriesBadges series={article.series} />
+        <div class="mx-auto mt-6 max-w-prose lg:hidden">
+          <TableOfContents entries={toc} variant="mobile" client:visible />
+        </div>
+        <div class="mt-8">
+          <ArticleBody html={html} />
+        </div>
+        <ArticleVideos videos={article.videos} />
+        <div class="mx-auto mt-8 max-w-prose">
+          <ShareButtons title={article.title} client:visible />
+        </div>
+        <ArticleTaxonomies topics={article.topics} tags={article.tags} />
+        <ArticleSources sources={article.sources} />
+        <ArticleResources resources={article.resources} />
+      </div>
+
+      <aside class="hidden lg:block">
+        <div class="sticky top-24">
+          <TableOfContents entries={toc} variant="desktop" client:visible />
+        </div>
+      </aside>
+    </div>
+
+    <RelatedArticles articles={article.related} />
+  </article>
+
+  <JsonLd data={articleJsonLd(article, canonicalUrl)} />
+</BaseLayout>

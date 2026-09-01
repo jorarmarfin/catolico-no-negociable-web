@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/navigation/Breadcrumbs.astro';
+import TopicHeader from '../../components/topic/TopicHeader.astro';
+import TopicSections from '../../components/topic/TopicSections.astro';
+import { getTopicBySlug } from '../../lib/api/topics';
+import { ApiRequestError } from '../../lib/api/client';
+
+const { slug } = Astro.params;
+const page = Number(Astro.url.searchParams.get('page') ?? '1');
+
+let topic;
+try {
+  ({ data: topic } = await getTopicBySlug(slug!, page));
+} catch (error) {
+  if (error instanceof ApiRequestError && error.status === 404) {
+    return Astro.rewrite('/404');
+  }
+  throw error;
+}
+---
+
+<BaseLayout title={topic.name} description={topic.description ?? `Contenido sobre ${topic.name}`}>
+  <Breadcrumbs items={[{ name: 'Temas', href: '/temas' }, { name: topic.name, href: `/temas/${topic.slug}` }]} />
+  <TopicHeader topic={topic} />
+  <div class="mx-auto max-w-6xl px-4 py-10">
+    <TopicSections topic={topic} />
+  </div>
+</BaseLayout>

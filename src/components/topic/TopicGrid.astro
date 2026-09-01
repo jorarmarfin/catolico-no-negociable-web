@@ -1,0 +1,23 @@
+---
+import type { Topic } from '../../types/taxonomy';
+import TopicCard from './TopicCard.astro';
+import EmptyState from '../ui/EmptyState.astro';
+
+interface Props {
+  topics: Topic[];
+}
+
+const { topics } = Astro.props;
+---
+
+{
+  topics.length > 0 ? (
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {topics.map((topic) => (
+        <TopicCard topic={topic} />
+      ))}
+    </div>
+  ) : (
+    <EmptyState title="Todavía no hay temas publicados." />
+  )
+}

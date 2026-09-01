@@ -1,0 +1,18 @@
+---
+import type { TopicDetail } from '../../types/topic-detail';
+import ArticleGrid from '../article/ArticleGrid.astro';
+import Pagination from '../ui/Pagination.astro';
+
+interface Props {
+  topic: TopicDetail;
+}
+
+const { topic } = Astro.props;
+---
+
+<div>
+  <ArticleGrid articles={topic.articles.data} emptyMessage="Todavía no hay contenidos publicados sobre este tema." />
+  <div class="mt-10">
+    <Pagination meta={topic.articles.meta} basePath={`/temas/${topic.slug}`} />
+  </div>
+</div>
