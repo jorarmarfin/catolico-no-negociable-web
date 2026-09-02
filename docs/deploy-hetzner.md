@@ -131,14 +131,56 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
+## 5b. Alternativa: Apache como reverse proxy
+
+Si en el servidor ya tienes Apache en vez de nginx (usa uno u otro, no ambos escuchando el mismo puerto 80).
+
+Habilitar los módulos necesarios:
+
+```bash
+sudo a2enmod proxy proxy_http headers
+sudo systemctl restart apache2
+```
+
+`/etc/apache2/sites-available/fe.luisitomayta.com.conf`:
+
+```apache
+<VirtualHost *:80>
+    ServerName fe.luisitomayta.com
+
+    ProxyPreserveHost On
+    ProxyPass / http://127.0.0.1:4321/
+    ProxyPassReverse / http://127.0.0.1:4321/
+
+    RequestHeader set X-Forwarded-Proto "http"
+    RequestHeader set X-Forwarded-For %{REMOTE_ADDR}s
+
+    ErrorLog ${APACHE_LOG_DIR}/fe.luisitomayta.com-error.log
+    CustomLog ${APACHE_LOG_DIR}/fe.luisitomayta.com-access.log combined
+</VirtualHost>
+```
+
+Activar el sitio:
+
+```bash
+sudo a2ensite fe.luisitomayta.com.conf
+sudo apache2ctl configtest
+sudo systemctl reload apache2
+```
+
+Importante: revisa que NO exista ya un `VirtualHost` o `DocumentRoot` apuntando a la carpeta `dist/` (eso es lo que está causando el listado `Index of /` en tu captura). Si existe uno con `DocumentRoot /ruta/a/dist`, elimínalo o coméntalo — todo el tráfico debe pasar por `ProxyPass` hacia Node, no servirse como archivos estáticos directos.
+
 ## 6. HTTPS con Let's Encrypt
 
 ```bash
 sudo apt install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d fe.luisitomayta.com
+# si usas Apache en vez de nginx:
+# sudo apt install -y python3-certbot-apache
+# sudo certbot --apache -d fe.luisitomayta.com
 ```
 
-Certbot edita el bloque `server` para escuchar en 443 y renueva automáticamente vía timer systemd (`sudo systemctl status certbot.timer`).
+Certbot edita el bloque `server`/`VirtualHost` para escuchar en 443 y renueva automáticamente vía timer systemd (`sudo systemctl status certbot.timer`).
 
 ## 7. Deploys posteriores
 
