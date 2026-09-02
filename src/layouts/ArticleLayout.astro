@@ -11,6 +11,7 @@ import ArticleResources from '../components/article/ArticleResources.astro';
 import RelatedArticles from '../components/article/RelatedArticles.astro';
 import TableOfContents from '../components/article/TableOfContents';
 import ShareButtons from '../components/article/ShareButtons';
+import LikeButton from '../components/article/LikeButton';
 import JsonLd from '../components/seo/JsonLd.astro';
 import type { Article } from '../types/article';
 import { extractTocAndAnnotateContent } from '../lib/utils/toc';
@@ -46,7 +47,8 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
           <ArticleBody html={html} />
         </div>
         <ArticleVideos videos={article.videos} />
-        <div class="mx-auto mt-8 max-w-prose">
+        <div class="mx-auto mt-8 flex max-w-prose flex-wrap items-center justify-between gap-4">
+          <LikeButton slug={article.slug} initialLikes={article.likes_count} client:visible />
           <ShareButtons title={article.title} client:visible />
         </div>
         <ArticleTaxonomies topics={article.topics} tags={article.tags} />

@@ -18,6 +18,13 @@ export function listArticles(params: ListArticlesParams = {}) {
   return apiFetch<ApiCollection<ArticleSummary>>('/articles', params);
 }
 
+export async function likeArticle(slug: string) {
+  const response = await apiFetch<ApiResponse<{ likes_count: number }>>(`/articles/${slug}/like`, undefined, {
+    method: 'POST'
+  });
+  return response.data;
+}
+
 /**
  * 404 si el artículo no existe, no está publicado o `published_at` es futuro
  * (lo maneja el backend; aquí solo se propaga el ApiRequestError con status 404).

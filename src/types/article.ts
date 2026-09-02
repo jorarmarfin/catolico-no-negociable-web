@@ -24,6 +24,7 @@ export interface ArticleSummary {
   content_type: string;
   is_featured: boolean;
   featured_image: string | null;
+  likes_count: number;
   section: Section;
   published_at: string;
   updated_at: string;
