@@ -69,11 +69,10 @@ El adapter `node` en modo `standalone` (ya configurado en `astro.config.mjs`) ge
 ```bash
 cd /var/www/catolico-no-negociable/current
 
-pm2 start dist/server/entry.mjs \
-  --name catolico-no-negociable \
-  --time \
-  -- --host 127.0.0.1 --port 4321
+PORT=4321 HOST=127.0.0.1 pm2 start "yarn start" --name catolico-no-negociable
 ```
+
+(`yarn start` ejecuta `node dist/server/entry.mjs`, definido en `package.json`.)
 
 Persistir entre reinicios del servidor:
 
